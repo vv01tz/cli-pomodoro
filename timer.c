@@ -3,17 +3,16 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-typedef struct 
+struct timer
 {
     int minutes;
     int seconds;
-}
-timer;
+};
 
 int minutesToSeconds(int min);
 int minutesLeft(time_t start, time_t end);
 int secondsLeft(time_t start, time_t end);
-void displayTimer(timer t);
+void displayTimer(struct timer t);
 
 int main(int argc, char *argv[])
 {
@@ -40,7 +39,7 @@ int main(int argc, char *argv[])
     time_t end = currentTimestamp + interval; 
 
     // Set timer.
-    timer pomodoro;
+    struct timer pomodoro;
     pomodoro.minutes = minutesLeft(currentTimestamp, end);
     pomodoro.seconds = secondsLeft(currentTimestamp, end);
 
@@ -90,7 +89,7 @@ int secondsLeft(time_t start, time_t end)
 }
 
 // Prints the timer on the console.
-void displayTimer(timer t)
+void displayTimer(struct timer t)
 {
     // Tomato emoji unicode caracter.
     printf(" \U0001F345 ");

@@ -9,7 +9,7 @@ struct timer
     int seconds;
 };
 
-int minutesToSeconds(int min);
+unsigned int minutesToSeconds(unsigned int min);
 int minutesLeft(time_t start, time_t end);
 int secondsLeft(time_t start, time_t end);
 void displayTimer(struct timer t);
@@ -22,15 +22,16 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    unsigned int interval = atoi(argv[1]);
 
-    if (atoi(argv[1]) <= 0) // Check if argument [m] is a positive int.
+    if (interval <= 0) // Check if argument [m] is a positive int.
     {
         printf("Arg must be a positive integer > 0.\n");
         return 2;
     }
 
     // Convert interval into seconds.
-    int interval = minutesToSeconds(atoi(argv[1]));
+    interval = minutesToSeconds(interval);
 
     // Get current timestamp in seconds.
     time_t currentTimestamp  = time(NULL);
@@ -65,7 +66,7 @@ int main(int argc, char *argv[])
 }
 
 // Converts minutes to seconds.
-int minutesToSeconds(int min)
+unsigned int minutesToSeconds(unsigned int min)
 {
     return min * 60;
 }

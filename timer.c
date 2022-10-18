@@ -2,32 +2,31 @@
 #include <time.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdint.h>
 
-typedef uint8_t BYTE;
-
-// In seconds
-BYTE timer;
+// In secondas.
+unsigned int timer = 0;
 
 #define MAX_TIME 250
 
 // Function Prototypes.
 unsigned int minutesToSeconds(unsigned int min);
-int minutesLeft(time_t start, time_t end);
-int secondsLeft(time_t start, time_t end);
-void displayTimer(struct timer t);
+unsigned int minutesLeft(unsigned int seconds);
+unsigned int secondsLeft(unsigned int seconds);
+void displayTimer(unsigned int timer);
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2) // Incorrect number of arguments.
+    // Incorect number of arguments.
+    if (argc != 2) 
     {
         printf("Usage: %s [minutes]\n", argv[0]);
         return 1;
     }
 
+    // Convert input string to int.
     unsigned int interval = atoi(argv[1]);
 
-    if (interval <= 0) // Check if argument [m] is a positive int.
+    if (interval <= 0) 
     {
         printf("Arg must be a positive integer > 0.\n");
         return 2;
@@ -42,15 +41,13 @@ int main(int argc, char *argv[])
     interval = minutesToSeconds(interval);
 
     // Get current timestamp in seconds.
-    time_t currentTimestamp  = time(NULL);
+    time_t currentTimestamp = time(NULL);
 
     // Set end of timer.
     time_t end = currentTimestamp + interval; 
 
     // Set timer.
-    struct timer pomodoro;
-    pomodoro.minutes = minutesLeft(currentTimestamp, end);
-    pomodoro.seconds = secondsLeft(currentTimestamp, end);
+    timer = (unsigned int) difftime(end, currentTimestamp); 
 
     while(currentTimestamp < end)
     {
@@ -58,11 +55,10 @@ int main(int argc, char *argv[])
         sleep(1);
 
         // Update timer
-        pomodoro.minutes = minutesLeft(currentTimestamp, end);
-        pomodoro.seconds = secondsLeft(currentTimestamp, end);
+        timer = (unsigned int) difftime(end, currentTimestamp),
 
-        // Display remaining minutes and seconds. 
-        displayTimer(pomodoro);
+        // Display remaining time. 
+        displayTimer(timer);
  
         // Update current timestamp.
         currentTimestamp = time(NULL);
@@ -80,31 +76,28 @@ unsigned int minutesToSeconds(unsigned int min)
 }
 
 // Calculates remaining minutes.
-int minutesLeft(time_t start, time_t end)
+unsigned int minutesLeft(unsigned int seconds)
 {
-    // Get the difference between two timestamps in seconds.
-    int  diff = (int) difftime(end, start);
-
-    return diff / 60;
+    return seconds / 60;
 }
 
 // Calculates the remaining seconds.
-int secondsLeft(time_t start, time_t end)
+unsigned int secondsLeft(unsigned int seconds)
 {
-    // Get the difference between two timestamps in seconds.
-    int diff = (int) difftime(end, start);
-
-    return diff % 60;
+    return seconds % 60;
 }
 
 // Prints the timer on the console.
-void displayTimer(struct timer t)
+void displayTimer(unsigned int timer)
 {
+    unsigned int minutes = minutesLeft(timer);
+    unsigned int seconds = secondsLeft(timer);
+
     // Tomato emoji unicode caracter.
     printf(" \U0001F345 ");
 
     // Print timer in mm:ss format. 
-    printf("%02d:%02d\n", t.minutes, t.seconds);
+    printf("%02d:%02d\n", minutes, seconds);
 
     // Move cursor up one line.
     printf("\33[A");

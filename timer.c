@@ -9,6 +9,9 @@ typedef uint8_t BYTE;
 // In seconds
 BYTE timer;
 
+#define MAX_TIME 250
+
+// Function Prototypes.
 unsigned int minutesToSeconds(unsigned int min);
 int minutesLeft(time_t start, time_t end);
 int secondsLeft(time_t start, time_t end);
@@ -28,6 +31,11 @@ int main(int argc, char *argv[])
     {
         printf("Arg must be a positive integer > 0.\n");
         return 2;
+    }
+    else if (interval > MAX_TIME)
+    {
+        printf("Cannot exceed the value of %i.\n", MAX_TIME);
+        return 3;
     }
     
     // Convert interval into seconds.

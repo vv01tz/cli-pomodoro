@@ -2,12 +2,12 @@
 #include <time.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdint.h>
 
-struct timer
-{
-    int minutes;
-    int seconds;
-};
+typedef uint8_t BYTE;
+
+// In seconds
+BYTE timer;
 
 unsigned int minutesToSeconds(unsigned int min);
 int minutesLeft(time_t start, time_t end);
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
         printf("Arg must be a positive integer > 0.\n");
         return 2;
     }
-
+    
     // Convert interval into seconds.
     interval = minutesToSeconds(interval);
 
